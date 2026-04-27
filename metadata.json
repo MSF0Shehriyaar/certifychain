@@ -1,0 +1,6 @@
+{
+  "name": "CertifyChain",
+  "description": "A blockchain-based certificate verification system that stores immutable hashes of certificates to prevent fraud and ensure authenticity.",
+  "requestFramePermissions": [],
+  "majorCapabilities": []
+}

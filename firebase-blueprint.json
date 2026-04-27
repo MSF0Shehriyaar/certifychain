@@ -1,0 +1,26 @@
+{
+  "entities": {
+    "Certificate": {
+      "title": "Certificate",
+      "description": "A digital certificate with a cryptographic hash recorded on the ledger.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "recipientName": { "type": "string" },
+        "courseName": { "type": "string" },
+        "issuerName": { "type": "string" },
+        "issueDate": { "type": "string" },
+        "dataHash": { "type": "string" },
+        "prevHash": { "type": "string" },
+        "timestamp": { "type": "number" }
+      },
+      "required": ["id", "recipientName", "courseName", "issuerName", "issueDate", "dataHash", "prevHash", "timestamp"]
+    }
+  },
+  "firestore": {
+    "/certificates/{id}": {
+      "schema": "Certificate",
+      "description": "Stored certificate records."
+    }
+  }
+}

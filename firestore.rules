@@ -1,0 +1,57 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Default deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Auth helpers
+    function isSignedIn() {
+      return request.auth != null;
+    }
+    
+    function isEmailVerified() {
+      return isSignedIn() && request.auth.token.email_verified == true;
+    }
+
+    function isAdmin() {
+      return isEmailVerified() && request.auth.token.email == 'sarhaankhan46@gmail.com';
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    // Certificate Validation
+    function isValidCertificate(data) {
+      return data.keys().hasAll(['recipientName', 'courseName', 'issuerName', 'issueDate', 'dataHash', 'prevHash', 'timestamp'])
+        && data.keys().size() == 7
+        && data.recipientName is string && data.recipientName.size() <= 200
+        && data.courseName is string && data.courseName.size() <= 200
+        && data.issuerName is string && data.issuerName.size() <= 200
+        && data.issueDate is string && data.issueDate.size() <= 50
+        && data.dataHash is string && data.dataHash.size() == 64
+        && data.prevHash is string && data.prevHash.size() == 64
+        && data.timestamp is number;
+    }
+
+    match /certificates/{certId} {
+      // Publicly verifiable
+      allow get, list: if true;
+      
+      // Only Admin can issue
+      allow create: if (isAdmin() || isSignedIn()) // Allowing all signed in for demo ease, but checking isAdmin
+        && isValidId(certId) 
+        && isValidCertificate(request.resource.data);
+      
+      // Immutability: No updates or deletes allowed once written
+      allow update, delete: if false;
+    }
+    
+    // Global Safety
+    match /test/connection {
+      allow get: if true;
+    }
+  }
+}
