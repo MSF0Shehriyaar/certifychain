@@ -2,7 +2,7 @@
 
 **Mohammed Shehriyaar F**, **Mohammed Muteeb Ahmed**, **Mohammed Ibrahim**
 
-Department of Computer Science and Engineering
+Department of Information Science
 
 ---
 
@@ -65,21 +65,25 @@ While existing solutions offer strong security guarantees, they typically requir
 
 ### 3.1 Architectural Overview
 
-CertifyChain employs a three-tier architecture consisting of a presentation layer, a service layer, and a persistence layer. Figure 1 illustrates the high-level system architecture.
+CertifyChain employs a two-tier client-server architecture consisting of a client-side presentation layer and a serverless backend layer integrating both application services and persistence. Figure 1 illustrates the high-level system architecture.
 
 ```
-+-------------------+        +-------------------+        +-------------------+
-|   Presentation    |        |     Service       |        |    Persistence    |
-|     Layer         |<------>|      Layer        |<------>|      Layer        |
-|                   |        |                   |        |                   |
-| - React 19        |        | - Certificate     |        | - Firebase        |
-| - TypeScript      |        |   Service         |        |   Firestore       |
-| - Tailwind CSS    |        | - SHA-256 Hashing |        | - Firebase Auth   |
-| - Framer Motion   |        | - Auth Guards     |        | - Security Rules  |
-+-------------------+        +-------------------+        +-------------------+
++---------------------------+        +-------------------------------------------+
+|      Client (Frontend)    |        |         Serverless Backend                |
+|                           |        |                                           |
+|  +---------------------+  |        |  +---------------------+----------------+ |
+|  |   Presentation      |  |        |  |     Service Layer   |  Persistence   | |
+|  |                     |  |        |  |                     |                | |
+|  |  - React 19         |  |<----->|  |  - Certificate      |  - Firestore   | |
+|  |  - TypeScript       |  |  HTTPS |  |    Service          |  - Firebase    | |
+|  |  - Tailwind CSS     |  |        |  |  - SHA-256 Hashing  |    Auth        | |
+|  |  - Framer Motion    |  |        |  |  - Auth Guards      |  - Security    | |
+|  +---------------------+  |        |  |                     |    Rules       | |
+|                           |        |  +---------------------+----------------+ |
++---------------------------+        +-------------------------------------------+
 ```
 
-**Figure 1:** CertifyChain Three-Tier Architecture
+**Figure 1:** CertifyChain Two-Tier Client-Server Architecture
 
 ### 3.2 Core Components
 
